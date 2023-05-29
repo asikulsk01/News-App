@@ -1,16 +1,19 @@
 package com.example.retrofit
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 class MainActivity : AppCompatActivity() {
     lateinit var adapter: NewsAdapter
@@ -29,6 +32,9 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+//
+
+
 
     private fun getNews(country: String, page: Int) {
 
@@ -47,6 +53,26 @@ class MainActivity : AppCompatActivity() {
                     var newsRecyclerView = findViewById<RecyclerView>(R.id.newsRecyclerView)
                     newsRecyclerView.adapter = adapter
                     newsRecyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
+
+                    //new
+                    adapter.setOnItemClickListner(object : NewsAdapter.onItemClickListner{
+                        override fun onItemClicked(position: Int) {
+
+                            val artical: List<Article> = news.articles
+                            var getArticle = artical[position]
+                            Toast.makeText(this@MainActivity,getArticle.title, Toast.LENGTH_SHORT).show()
+
+////                            //now send the artical to the next page.
+//
+//                            val intent = Intent(this@MainActivity, NewsDetail::class.java)
+//                            intent.putExtra("nTitle",getArticle.title)
+//                            intent.putExtra("nDesc", getArticle.description)
+//                            intent.putExtra("nImg", getArticle.urlToImage)
+//                            startActivity(intent)
+//
+//                            Toast.makeText(this@MainActivity,"done", Toast.LENGTH_SHORT).show()
+                        }
+                    })
 
                 }else{
                     Log.d("MyTag", "No News found")
